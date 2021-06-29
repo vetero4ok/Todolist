@@ -2,13 +2,14 @@ import {FilterValuesType, TodolistType} from '../App';
 import {v1} from 'uuid';
 
 
-type RemoveTodoListAT = {
+export type RemoveTodoListAT = {
     type: 'REMOVE-TODOLIST'
     todoListsID: string
 }
-type AddTodoListAT = {
+export type AddTodoListAT = {
     type: 'ADD-TODOLIST'
     title: string
+    todoListsID:string
 
 }
 type changeTodoListFilterAT = {
@@ -29,7 +30,7 @@ export const todoListsReducer = (todoLists: Array<TodolistType>, action: ActionT
         case 'REMOVE-TODOLIST':
             return todoLists.filter(tl => tl.id !== action.todoListsID)
         case 'ADD-TODOLIST':
-            const newTodoListID = v1()
+            const newTodoListID = action.todoListsID
             const newTodoList: TodolistType = {
                 id: newTodoListID,
                 title: action.title,
@@ -55,7 +56,9 @@ export const RemoveTodoListAC = (todoListsID: string): RemoveTodoListAT => {
 export const AddTodoListAC = (title:string):AddTodoListAT => {
     return ({
         type: 'ADD-TODOLIST',
-        title
+        title,
+        todoListsID: v1()
+
     });
 }
 export const ChangeTodoListFilterAC = (todoListsID:string,filter: FilterValuesType):changeTodoListFilterAT=>{
