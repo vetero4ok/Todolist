@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useCallback} from 'react';
 import {FilterValuesType, TaskType} from './App';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
@@ -8,24 +8,30 @@ import {Delete} from '@material-ui/icons';
 
 type PropsTodoListType = {
     todoListsID: string
-    title: string,
+    title: string
     tasks: Array<TaskType>
     filter: FilterValuesType
     removeTask: (taskId: string, todoListsID: string) => void
+    addTask: (title: string, todoListsID: string) => void
+    changeTaskTitle: (taskID: string, title: string, todoListsID: string) => void
     changeTodoListFilter: (filterValue: FilterValuesType, todoListsID: string) => void
     changeTodoListTitle: (title: string, todoListsID: string) => void
-    addTask: (title: string, todoListsID: string) => void
     changeTaskStatus: (taskID: string, isDone: boolean, todoListsID: string) => void
     removeTodoList: (todoListsID: string) => void
-    changeTaskTitle: (taskID: string, title: string, todoListsID: string) => void
-
 };
 
 
-function Todolist(props: PropsTodoListType) {
+export const Todolist = React.memo((props: PropsTodoListType) => {
+    console.log('todolist')
+    let taskForTodoList = props.tasks
+    if (props.filter === 'active'){
+        taskForTodoList = taskForTodoList.filter(t=>!t.isDone)
+    }
+    if (props.filter === 'completed'){
+        taskForTodoList = taskForTodoList.filter(t=>t.isDone)
+    }
 
-
-    const taskJSXElement = props.tasks.map(t => {
+    const taskJSXElement = taskForTodoList.map(t => {
         const removeTask = () => props.removeTask(t.id, props.todoListsID)
         const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
             props.changeTaskStatus(t.id, e.currentTarget.checked, props.todoListsID)
@@ -48,34 +54,31 @@ function Todolist(props: PropsTodoListType) {
                  />
 
                </span>
-                {/*<button onClick={removeTask}>x</button>*/}
                 <IconButton aria-label="delete" onClick={removeTask}>
                     <Delete/>
                 </IconButton>
             </li>
         )
     })
-    const deleteTodolist = () => props.removeTodoList(props.todoListsID)
+    const removeTodolist = () => props.removeTodoList(props.todoListsID)
     const onClickSetAllFilter = () => props.changeTodoListFilter('all', props.todoListsID)
     const onClickSetActiveFilter = () => props.changeTodoListFilter('active', props.todoListsID)
     const onClickSetCompletedFilter = () => props.changeTodoListFilter('completed', props.todoListsID)
-
     const addTask = (title: string) => props.addTask(title, props.todoListsID)
     const changeTodoListTitle = (title: string) => props.changeTodoListTitle(title, props.todoListsID)
+
+
 
     return (
         <div>
             <h3>
                 <EditableSpan title={props.title} changeTitle={changeTodoListTitle}/>
-                {/*<button onClick={deleteTodolist} >*/}
-                {/*    x*/}
-                {/*</button>*/}
-                <IconButton aria-label="delete" onClick={deleteTodolist}>
+                <IconButton aria-label="delete" onClick={removeTodolist}>
                     <Delete/>
                 </IconButton>
             </h3>
             <AddItemForm addItem={addTask}/>
-            <ul style={{listStyle:'none', padding:'0px'}}>
+            <ul style={{listStyle: 'none', padding: '0px'}}>
                 {taskJSXElement}
             </ul>
             <div>
@@ -106,6 +109,6 @@ function Todolist(props: PropsTodoListType) {
             </div>
         </div>
     );
-}
+})
 
 export default Todolist;

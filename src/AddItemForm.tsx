@@ -3,13 +3,15 @@ import {IconButton, TextField} from '@material-ui/core';
 import {AddBox} from '@material-ui/icons';
 
 
+
 export type AddItemFormProps = {
     addItem:(title:string)=>void
 }
 
 
 
-export function AddItemForm(props:AddItemFormProps) {
+export const AddItemForm = React.memo((props:AddItemFormProps) => {
+    //console.log('AddItemForm')
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
 
@@ -18,7 +20,7 @@ export function AddItemForm(props:AddItemFormProps) {
         setTitle(e.currentTarget.value)
     }
     const onChangeKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
+          if (e.key === 'Enter') {
             onClickAddItem()
         }
     }
@@ -34,6 +36,7 @@ export function AddItemForm(props:AddItemFormProps) {
     //const errorMessage = error ? <div style = {{color:'red' }}> Text  is required!</div>: null
 
     return(
+
         <div>
             <TextField
                 variant={'outlined'}
@@ -46,21 +49,13 @@ export function AddItemForm(props:AddItemFormProps) {
                 error={error}
                 helperText={error &&'Title is required!'}
             />
-            {/*<input*/}
-            {/*    value={title}*/}
-            {/*    onChange={onChangeTitle}// event*/}
-            {/*    onKeyPress={onChangeKeyPress}*/}
-            {/*    className={error ? 'error' : ''}*/}
-            {/*/>*/}
-            {/*<button onClick={onClickAddItem}>+</button>*/}
+
             <IconButton onClick={onClickAddItem} >
                <AddBox/>
             </IconButton>
-            {/*{errorMessage}*/}
-            {/* другой код*/}
-            {/*{error && <div style={{color: 'red'}}> Text is required!</div>}*/}
+
         </div>
 
     );
 
-}
+} )
