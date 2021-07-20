@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {AppBar, Button, IconButton, Typography, Toolbar, Container, Grid, Paper} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
 import Todolist from './Todolist';
-import {AddItemForm} from './AddItemForm';
+import {AddItemForm} from './AddItemForm/AddItemForm';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './State/Strore';
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './State/tasks-reducer';

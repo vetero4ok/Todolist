@@ -15,7 +15,7 @@ import {
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './State/tasks-reducer';
 import App from './App';
 import Todolist from './Todolist';
-import {AddItemForm} from './AddItemForm';
+import {AddItemForm} from './AddItemForm/AddItemForm';
 
 export type TaskType = {
     id: string,
