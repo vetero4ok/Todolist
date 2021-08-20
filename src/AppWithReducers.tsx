@@ -11,11 +11,11 @@ import {
     RemoveTodoListAC,
     ChangeTodoListTitleAC,
     AddTodoListAC
-} from './State/todolist-reducer';
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './State/tasks-reducer';
+} from './Store/todolist-reducer';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './Store/tasks-reducer';
 import App from './App';
-import Todolist from './Todolist';
-import {AddItemForm} from './AddItemForm/AddItemForm';
+import Todolist from './Componets/Todolist/Todolist';
+import {AddItemForm} from './Componets/AddItemForm/AddItemForm';
 
 export type TaskType = {
     id: string,

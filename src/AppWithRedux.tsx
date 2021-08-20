@@ -1,12 +1,12 @@
 import React, {useCallback} from 'react';
 import {AppBar, Button, IconButton, Typography, Toolbar, Container, Grid, Paper} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
-import Todolist from './Todolist';
-import {AddItemForm} from './AddItemForm/AddItemForm';
+import Todolist from './Componets/Todolist/Todolist';
+import {AddItemForm} from './Componets/AddItemForm/AddItemForm';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from './State/Strore';
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './State/tasks-reducer';
-import {AddTodoListAC, ChangeTodoListFilterAC, ChangeTodoListTitleAC, RemoveTodoListAC} from './State/todolist-reducer';
+import {AppRootStateType} from './Store/Strore';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './Store/tasks-reducer';
+import {AddTodoListAC, ChangeTodoListFilterAC, ChangeTodoListTitleAC, RemoveTodoListAC} from './Store/todolist-reducer';
 
 export type TaskType = {
     id: string,

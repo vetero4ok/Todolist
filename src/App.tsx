@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import './App.css';
-import Todolist from './Todolist';
+import Todolist from './Componets/Todolist/Todolist';
 import {v1} from 'uuid';
-import {AddItemForm} from './AddItemForm/AddItemForm';
+import {AddItemForm} from './Componets/AddItemForm/AddItemForm';
 import {AppBar, Button, IconButton, Typography, Toolbar, Container, Grid, Paper} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
 
@@ -114,10 +114,10 @@ function App() {
 
 
     const todoListComponents = todoLists.map(tl => {
-        const tasksForTodoList = getFilteredTask(tl)
+       const tasksForTodoList = getFilteredTask(tl)
         return (
             <Grid item key={tl.id}>
-                <Paper elevation={5} style={{padding:'20px'}}>
+                <Paper elevation={5} style={{padding: '20px'}}>
                 <Todolist
 
                     todoListsID={tl.id}
