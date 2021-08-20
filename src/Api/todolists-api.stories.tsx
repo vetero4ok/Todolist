@@ -97,7 +97,7 @@ export const UpdateTodolistTitle = () => {
     const [todoID, setTodoID] = useState<any>('')
     const [title, setTitle] = useState<any>('')
 
-    const updatedTodolistTitle = ()=> {
+    const updatedTodolistTitle = () => {
         todolistAPi.updateTodolist(title, todoID)
             .then((res) =>
                 setState(`${JSON.stringify(res.data.data)} - todolist id '${todoID}' updated`))
@@ -130,5 +130,174 @@ export const UpdateTodolistTitle = () => {
         <br/>
         <br/>
         <div> {JSON.stringify(state)}</div>
+    </>
+}
+export const GetTasks = () => {
+    const [state, setState] = useState<any>(null)
+    const [todolistId, setTodolistId] = useState<any>('')
+
+    const getTasksHandler = () => {
+        todolistAPi.getTasks(todolistId)
+            .then((res) => {
+                setState(res.data.data.items)
+            })
+    }
+
+    return <>
+        <Input
+            autoFocus
+            placeholder={'Id for todolist'}
+            value={todolistId}
+            onChange={(e) => setTodolistId(e.currentTarget.value)}
+        />
+        <br/>
+        <br/>
+        <Button
+            color={'primary'}
+            variant={'contained'}
+            value={state}
+            onClick={getTasksHandler}>
+            Get Task
+        </Button>
+        <br/>
+        <br/>
+        <div> {JSON.stringify(state)}</div>
+
+    </>
+}
+export const CreateTask = () => {
+    const [state, setState] = useState<any>(null)
+    const [todolistId, setTodolistId] = useState<any>('')
+    const [title, setTitle] = useState<any>('')
+
+    const createTaskHandler = () => {
+        todolistAPi.createTask(todolistId,title)
+            .then((res) => {
+                setState(res.data.data.item)
+            })
+    }
+
+    return <>
+        <Input
+            autoFocus
+            placeholder={'Title for task'}
+            value={title}
+            onChange={(e) => setTitle(e.currentTarget.value)}
+        />
+        <br/>
+        <br/>
+        <Input
+            autoFocus
+            placeholder={'Id for todolist'}
+            value={todolistId}
+            onChange={(e) => setTodolistId(e.currentTarget.value)}
+        />
+        <br/>
+        <br/>
+        <Button
+            color={'primary'}
+            variant={'contained'}
+            value={state}
+            onClick={createTaskHandler}>
+            Create Task
+        </Button>
+        <br/>
+        <br/>
+        <div> {JSON.stringify(state)}</div>
+
+    </>
+}
+export const DeleteTask = () => {
+    const [state, setState] = useState<any>(null)
+    const [todolistId, setTodolistId] = useState<any>('')
+    const [taskId, setTaskId] = useState<any>('')
+
+    const createTaskHandler = () => {
+        todolistAPi.deleteTask(todolistId,taskId)
+            .then((res) => {
+                setState(`${JSON.stringify(res.data.data)} - task '${taskId}' => todolist '${todolistId}' is deleted`)
+            })
+    }
+
+    return <>
+
+        <Input
+            autoFocus
+            placeholder={'Id for todolist'}
+            value={todolistId}
+            onChange={(e) => setTodolistId(e.currentTarget.value)}
+        />
+        <br/>
+        <br/>
+        <Input
+            autoFocus
+            placeholder={'Id for task'}
+            value={taskId}
+            onChange={(e) => setTaskId(e.currentTarget.value)}
+        />
+        <br/>
+        <br/>
+        <Button
+            color={'primary'}
+            variant={'contained'}
+            value={state}
+            onClick={createTaskHandler}>
+            Delete Task
+        </Button>
+        <br/>
+        <br/>
+        <div> {JSON.stringify(state)}</div>
+
+    </>
+}
+export const UpdateTaskTitle = () => {
+    const [state, setState] = useState<any>(null)
+    const [todolistId, setTodolistId] = useState<any>('')
+    const [taskId, setTaskId] = useState<any>('')
+    const [title, setTitle] = useState<any>('')
+
+    const updateTaskHandler = () => {
+        todolistAPi.updateTask(todolistId,taskId,title)
+            .then((res) => {
+                setState(`${JSON.stringify(res.data.data)} - task '${taskId}' => todolist '${todolistId}' is updated`)
+            })
+    }
+
+    return <>
+        <Input
+            autoFocus
+            placeholder={'title for task'}
+            value={title}
+            onChange={(e) => setTitle(e.currentTarget.value)}
+        />
+        <br/>
+        <br/>
+        <Input
+            autoFocus
+            placeholder={'Id for todolist'}
+            value={todolistId}
+            onChange={(e) => setTodolistId(e.currentTarget.value)}
+        />
+        <br/>
+        <br/>
+        <Input
+            autoFocus
+            placeholder={'Id for task'}
+            value={taskId}
+            onChange={(e) => setTaskId(e.currentTarget.value)}
+        />
+        <br/>
+        <br/>
+        <Button
+            color={'primary'}
+            variant={'contained'}
+            value={state}
+            onClick={updateTaskHandler}>
+            Update Task
+        </Button>
+        <br/>
+        <br/>
+        <div> {JSON.stringify(state)}</div>
+
     </>
 }
