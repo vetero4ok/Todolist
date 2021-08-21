@@ -171,7 +171,7 @@ export const CreateTask = () => {
     const [title, setTitle] = useState<any>('')
 
     const createTaskHandler = () => {
-        todolistAPi.createTask(todolistId,title)
+        todolistAPi.createTask(todolistId, title)
             .then((res) => {
                 setState(res.data.data.item)
             })
@@ -213,7 +213,7 @@ export const DeleteTask = () => {
     const [taskId, setTaskId] = useState<any>('')
 
     const createTaskHandler = () => {
-        todolistAPi.deleteTask(todolistId,taskId)
+        todolistAPi.deleteTask(todolistId, taskId)
             .then((res) => {
                 setState(`${JSON.stringify(res.data.data)} - task '${taskId}' => todolist '${todolistId}' is deleted`)
             })
@@ -257,7 +257,20 @@ export const UpdateTaskTitle = () => {
     const [title, setTitle] = useState<any>('')
 
     const updateTaskHandler = () => {
-        todolistAPi.updateTask(todolistId,taskId,title)
+        let payload = {
+            id: taskId,
+            title: title,
+            description: 'null | string',
+            todoListId: todolistId,
+            order: -3,
+            status: 1,
+            priority: 2,
+            startDate: '2021-08-20T09:52:12.087',
+            deadline: '2021-08-20T09:52:12.087',
+            addedDate: '2021-08-20T09:52:12.087',
+        }
+        /** Put приймає до оновлення повний обєкт*/
+        todolistAPi.updateTask(todolistId, taskId, payload)
             .then((res) => {
                 setState(`${JSON.stringify(res.data.data)} - task '${taskId}' => todolist '${todolistId}' is updated`)
             })
