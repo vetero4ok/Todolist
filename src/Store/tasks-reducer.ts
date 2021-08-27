@@ -1,4 +1,4 @@
-import {AddTodoListAT, RemoveTodoListAT, SetTodolistsAT} from './todolist-reducer';
+import {AddTodoListAC, RemoveTodoListAT, SetTodolistsAT} from './todolist-reducer';
 import {v1} from 'uuid';
 import {TaskStatuses, TaskType, todolistAPi,} from '../Api/Api';
 import {AppThunk} from './Strore';
@@ -31,7 +31,7 @@ export type TasksActionType = RemoveTaskAT
     | AddTaskAT
     | changeTaskStatusAT
     | changeTaskTitleAT
-    | AddTodoListAT
+    | AddTodoListAC
     | RemoveTodoListAT
     | SetTodolistsAT
     | SetTasksAT
@@ -87,7 +87,7 @@ export const tasksReducer = (state = initialState, action: TasksActionType): Tas
         case 'ADD-TODOLIST':
             return {
                 ...state,
-                [action.todoListsID]: []
+                [action.todolist.id]: []
             }
         case 'REMOVE-TODOLIST':
             let newState = {...state}

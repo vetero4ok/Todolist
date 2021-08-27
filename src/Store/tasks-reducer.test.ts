@@ -7,12 +7,18 @@ import {
     TasksStateType
 } from './tasks-reducer';
 
-import {AddTodoListAC, RemoveTodoListAC} from './todolist-reducer';
-import {TaskStatuses} from '../Api/Api';
+import {addTodoListAC, RemoveTodoListAC} from './todolist-reducer';
+import {TaskStatuses, TodolistType} from '../Api/Api';
 
 let startState: TasksStateType
-
+let todolistWithServer: TodolistType
 beforeEach(() => {
+    todolistWithServer = {
+        id: 'string',
+        title: 'Beer',
+        addedDate: '',
+        order: 1
+    }
     startState = {
         'todolistId1': [
             {
@@ -116,7 +122,7 @@ test('title of specified task should be changed', () => {
 
 });
 test('new array should be added when new todolist is added', () => {
-    const action = AddTodoListAC('new todolist');
+    const action = addTodoListAC(todolistWithServer);
     const endState = tasksReducer(startState, action)
 
     const keys = Object.keys(endState);
