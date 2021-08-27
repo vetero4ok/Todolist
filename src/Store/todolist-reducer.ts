@@ -29,11 +29,11 @@ export type TodolistDomainType = TodolistType & {
 }
 
 
-export type ActionType = RemoveTodoListAT | AddTodoListAT | changeTodoListFilterAT | changeTodoListTitleAT
+export type TodolistActionType = RemoveTodoListAT | AddTodoListAT | changeTodoListFilterAT | changeTodoListTitleAT
 
 const initialState: Array<TodolistDomainType> = []
 
-export const todoListsReducer = (todoLists = initialState, action: ActionType): Array<TodolistDomainType> => {
+export const todoListsReducer = (todoLists = initialState, action: TodolistActionType): Array<TodolistDomainType> => {
     switch (action.type) {
         case 'REMOVE-TODOLIST':
             return todoLists.filter(tl => tl.id !== action.todoListsID)

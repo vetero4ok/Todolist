@@ -25,7 +25,7 @@ type changeTaskTitleAT = {
     title: string
     todoListsID: string
 }
-export type ActionType = RemoveTaskAT
+export type TasksActionType = RemoveTaskAT
     | AddTaskAT
     | changeTaskStatusAT
     | changeTaskTitleAT
@@ -42,7 +42,7 @@ const initialState: TasksStateType = {}
 //const initialState = {}
 //type InitialStateType = typeof initialState
 
-export const tasksReducer = (state = initialState, action: ActionType): TasksStateType => {
+export const tasksReducer = (state = initialState, action: TasksActionType): TasksStateType => {
     switch (action.type) {
         case 'REMOVE-TASK':
             // let todoListTasks = state[action.todoListsID]
