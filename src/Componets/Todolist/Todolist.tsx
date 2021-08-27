@@ -26,7 +26,6 @@ type PropsTodoListType = {
 
 
 export const Todolist = React.memo((props: PropsTodoListType) => {
-    //  debugger
     const {
         todoListsID,
         title,
@@ -42,10 +41,10 @@ export const Todolist = React.memo((props: PropsTodoListType) => {
     } = props;
 
     const dispatch = useDispatch()
-    useEffect(() =>  {
-       // todolistAPi.getTasks(todoListsID).then(res=> {
-       //     debugger
-       // })
+    useEffect(() => {
+        // todolistAPi.getTasks(todoListsID).then(res=> {
+        //     debugger
+        // })
 
         dispatch(setTasksTC(todoListsID))
     }, [])

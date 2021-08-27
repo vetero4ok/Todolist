@@ -9,7 +9,7 @@ import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TasksSta
 import {
     addTodolistTC,
     ChangeTodoListFilterAC,
-    ChangeTodoListTitleAC,
+    changeTodolistTitleTC,
     fetchTodolistsTC,
     FilterValuesType,
     removeTodolistTC,
@@ -49,9 +49,8 @@ export function AppWithRedux() {
         dispatch(action)
     }, [dispatch])
     const changeTodoListTitle = useCallback((title: string, todoListsID: string) => {
-        dispatch(ChangeTodoListTitleAC(todoListsID, title))
+        dispatch(changeTodolistTitleTC(title,todoListsID))
     }, [dispatch])
-
 
 //UI: User Interface
 
