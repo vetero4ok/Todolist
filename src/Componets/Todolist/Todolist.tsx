@@ -42,10 +42,6 @@ export const Todolist = React.memo((props: PropsTodoListType) => {
 
     const dispatch = useDispatch()
     useEffect(() => {
-        // todolistAPi.getTasks(todoListsID).then(res=> {
-        //     debugger
-        // })
-
         dispatch(setTasksTC(todoListsID))
     }, [])
 
