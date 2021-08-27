@@ -1,5 +1,7 @@
 import {v1} from 'uuid';
-import {TodolistType} from '../Api/Api';
+import {todolistAPi, TodolistType} from '../Api/Api';
+import {AppThunk} from './Strore';
+import {Dispatch} from 'redux';
 
 
 export type RemoveTodoListAT = {
@@ -29,14 +31,18 @@ export type TodolistDomainType = TodolistType & {
 }
 
 
-export type TodolistActionType = RemoveTodoListAT | AddTodoListAT | changeTodoListFilterAT | changeTodoListTitleAT
+export type TodolistActionType = RemoveTodoListAT
+    | AddTodoListAT
+    | changeTodoListFilterAT
+    | changeTodoListTitleAT
+    | SetTodolistsAT
 
 const initialState: Array<TodolistDomainType> = []
 
-export const todoListsReducer = (todoLists = initialState, action: TodolistActionType): Array<TodolistDomainType> => {
+export const todoListsReducer = (state = initialState, action: TodolistActionType): Array<TodolistDomainType> => {
     switch (action.type) {
         case 'REMOVE-TODOLIST':
-            return todoLists.filter(tl => tl.id !== action.todoListsID)
+            return state.filter(tl => tl.id !== action.todoListsID)
         case 'ADD-TODOLIST':
             const newTodoListID = action.todoListsID
             const newTodoList: TodolistDomainType = {
@@ -46,13 +52,16 @@ export const todoListsReducer = (todoLists = initialState, action: TodolistActio
                 order: 0,
                 filter: 'all',
             }
-            return [...todoLists, newTodoList]
+            return [...state, newTodoList]
         case 'CHANGE-TODOLIST-FILTER':
-            return todoLists.map(tl => tl.id === action.todoListsID ? {...tl, filter: action.filter} : tl)
+            return state.map(tl => tl.id === action.todoListsID ? {...tl, filter: action.filter} : tl)
         case 'CHANGE-TODOLIST-TITLE':
-            return todoLists.map(tl => tl.id === action.todoListsID ? {...tl, title: action.title} : tl)
+            return state.map(tl => tl.id === action.todoListsID ? {...tl, title: action.title} : tl)
+        case 'SET-TODOLISTS': {
+            return action.todolists.map(tl => {return {...tl, filter: 'all'}})
+        }
         default:
-            return todoLists
+            return state
     }
 }
 
@@ -68,7 +77,6 @@ export const AddTodoListAC = (title: string): AddTodoListAT => {
         type: 'ADD-TODOLIST',
         title,
         todoListsID: v1()
-
     });
 }
 export const ChangeTodoListFilterAC = (todoListsID: string, filter: FilterValuesType): changeTodoListFilterAT => {
@@ -77,7 +85,6 @@ export const ChangeTodoListFilterAC = (todoListsID: string, filter: FilterValues
         todoListsID,
         filter
     });
-
 }
 export const ChangeTodoListTitleAC = (todoListsID: string, title: string): changeTodoListTitleAT => {
     return ({
@@ -85,4 +92,18 @@ export const ChangeTodoListTitleAC = (todoListsID: string, title: string): chang
         todoListsID,
         title
     });
+}
+const setTodolists = (todolists: Array<TodolistType>) => {
+    return {
+        type: 'SET-TODOLISTS',
+        todolists
+    } as const
+}
+export type SetTodolistsAT = ReturnType<typeof setTodolists>
+
+export const fetchTodolistsTC = (): AppThunk => (dispatch: Dispatch) => {
+    todolistAPi.getTodolist()
+        .then((res) => {
+            dispatch(setTodolists(res.data))
+        })
 }

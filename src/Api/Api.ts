@@ -41,12 +41,17 @@ export type TaskType = {
     deadline: null | string
     addedDate: string
 }
-type CommonResponseType<T = {}> = {
+export type CommonResponseType<T = {}> = {
     data: T
-    messages: []
+    messages: Array<string>
     fieldsErrors: []
     resultCode: number
 
+}
+export type GetTasksResponse = {
+    error:string | null
+    totalCount:number
+    items:Array<TaskType>
 }
 
 export const todolistAPi = {
@@ -63,7 +68,7 @@ export const todolistAPi = {
         return instance.put<CommonResponseType>(`todo-lists/${id}`, {title})
     },
     getTasks(todolistId: string) {
-        return instance.get<CommonResponseType<{ items: Array<TaskType> }>>(`todo-lists/${todolistId}/tasks`)
+        return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
     },
     createTask(todolistId: string, title: string) {
         return instance.post<CommonResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, {title})

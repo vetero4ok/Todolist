@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {AddItemForm} from '../AddItemForm/AddItemForm';
 import {EditableSpan} from '../EditableSpan/EditableSpan';
 import {Button, IconButton} from '@material-ui/core';
@@ -6,6 +6,8 @@ import {Delete} from '@material-ui/icons';
 import {Task} from '../Task/Task';
 import {TaskStatuses, TaskType} from '../../Api/Api';
 import {FilterValuesType} from '../../Store/todolist-reducer';
+import {useDispatch} from 'react-redux';
+import {setTasksTC} from '../../Store/tasks-reducer';
 
 
 type PropsTodoListType = {
@@ -39,6 +41,14 @@ export const Todolist = React.memo((props: PropsTodoListType) => {
         removeTodoList
     } = props;
 
+    const dispatch = useDispatch()
+    useEffect(() =>  {
+       // todolistAPi.getTasks(todoListsID).then(res=> {
+       //     debugger
+       // })
+
+        dispatch(setTasksTC(todoListsID))
+    }, [])
 
     //console.log('todolist')
     let taskForTodoList = tasks
@@ -48,9 +58,6 @@ export const Todolist = React.memo((props: PropsTodoListType) => {
     if (filter === 'completed') {
         taskForTodoList = taskForTodoList.filter(t => t.status === TaskStatuses.Completed)
     }
-
-    console.log(taskForTodoList)
-    console.log(tasks)
 
     const removeTaskCallback = useCallback((taskId: string, todoListsID: string) =>
         removeTask(taskId, todoListsID), [removeTask])

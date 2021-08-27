@@ -9,7 +9,6 @@ export default {
 export const GetTodolists = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
-        // debugger
         todolistAPi.getTodolist()
             .then((res) => {
                 setState(res.data)
@@ -139,7 +138,7 @@ export const GetTasks = () => {
     const getTasksHandler = () => {
         todolistAPi.getTasks(todolistId)
             .then((res) => {
-                setState(res.data.data.items)
+                setState(res.data.items)
             })
     }
 
