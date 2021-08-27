@@ -1,4 +1,4 @@
-import {AddTodoListAC, RemoveTodoListAT, SetTodolistsAT} from './todolist-reducer';
+import {AddTodoListAT, RemoveTodoListAT, SetTodolistsAT} from './todolist-reducer';
 import {v1} from 'uuid';
 import {TaskStatuses, TaskType, todolistAPi,} from '../Api/Api';
 import {AppThunk} from './Strore';
@@ -31,7 +31,7 @@ export type TasksActionType = RemoveTaskAT
     | AddTaskAT
     | changeTaskStatusAT
     | changeTaskTitleAT
-    | AddTodoListAC
+    | AddTodoListAT
     | RemoveTodoListAT
     | SetTodolistsAT
     | SetTasksAT

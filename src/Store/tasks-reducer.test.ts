@@ -7,7 +7,7 @@ import {
     TasksStateType
 } from './tasks-reducer';
 
-import {addTodoListAC, RemoveTodoListAC} from './todolist-reducer';
+import {addTodoListAC, removeTodoListAC} from './todolist-reducer';
 import {TaskStatuses, TodolistType} from '../Api/Api';
 
 let startState: TasksStateType
@@ -135,7 +135,7 @@ test('new array should be added when new todolist is added', () => {
     expect(endState[newKey]).toEqual([]);
 });
 test('property with todolistId should be deleted', () => {
-    const action = RemoveTodoListAC('todolistId2');
+    const action = removeTodoListAC('todolistId2');
     const endState = tasksReducer(startState, action)
     const keys = Object.keys(endState);
 
