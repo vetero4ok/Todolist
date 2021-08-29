@@ -5,7 +5,7 @@ import Todolist from './Componets/Todolist/Todolist';
 import {AddItemForm} from './Componets/AddItemForm/AddItemForm';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './Store/Strore';
-import {addTaskTC, changeTaskStatusAC, changeTaskTitleTC, removeTaskTC, TasksStateType} from './Store/tasks-reducer';
+import {addTaskTC, changeTaskStatusTC, changeTaskTitleTC, removeTaskTC, TasksStateType} from './Store/tasks-reducer';
 import {
     addTodolistTC,
     ChangeTodoListFilterAC,
@@ -33,7 +33,8 @@ export function AppWithRedux() {
         dispatch(addTaskTC(todoListsID, title))
     }, [dispatch])
     const changeTaskStatus = useCallback((taskID: string, status: TaskStatuses, todoListsID: string) => {
-        dispatch(changeTaskStatusAC(taskID, status, todoListsID))
+       dispatch(changeTaskStatusTC(todoListsID,taskID,status))
+        //  dispatch(changeTaskStatusAC(taskID, status, todoListsID))
     }, [dispatch])
     const changeTaskTitle = useCallback((taskID: string, title: string, todoListsID: string) => {
        dispatch(changeTaskTitleTC(todoListsID,taskID,title))
