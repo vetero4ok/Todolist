@@ -32,15 +32,24 @@ export type TodolistType = {
 export type TaskType = {
     id: string
     title: string
-    description: null | string
+    description: string
     todoListId: string
     order: number
     status: TaskStatuses
     priority: TaskPriorities
-    startDate: null | string
-    deadline: null | string
+    startDate:  string
+    deadline:  string
     addedDate: string
 }
+export type UpdateTaskModelType = {
+    title: string
+    description: string
+    status: number
+    priority: number
+    startDate: string
+    deadline: string
+}
+
 export type CommonResponseType<T = {}> = {
     data: T
     messages: Array<string>
@@ -76,7 +85,7 @@ export const todolistAPi = {
     deleteTask(todolistId: string, taskId: string) {
         return instance.delete<CommonResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
-    updateTask(todolistId: string, taskId: string, payload: TaskType) {
+    updateTask(todolistId: string, taskId: string, payload: UpdateTaskModelType) {
         return instance.put<CommonResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, payload)
     },
 

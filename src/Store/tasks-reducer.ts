@@ -1,5 +1,5 @@
 import {AddTodoListAT, RemoveTodoListAT, SetTodolistsAT} from './todolist-reducer';
-import {TaskStatuses, TaskType, todolistAPi,} from '../Api/Api';
+import {TaskStatuses, TaskType, todolistAPi, UpdateTaskModelType,} from '../Api/Api';
 import {AppThunk} from './Strore';
 import {Dispatch} from 'redux';
 
@@ -143,5 +143,23 @@ export const removeTaskTC = (todolistId: string, taskId: string): AppThunk => (d
         .then(res => {
             dispatch(removeTaskAC(taskId, todolistId))
         })
+}
+export const changeTaskTitleTC = (todolistId: string, taskId: string, title: string):AppThunk => (dispatch: Dispatch, getState) => {
+    let task = getState().tasks[todolistId].filter(t => t.id === taskId)[0]
 
+    if (task) {
+        const payload: UpdateTaskModelType = {
+            title,
+            status: task.status,
+            priority: task.priority,
+            description: task.description,
+            deadline: task.deadline,
+            startDate: task.startDate
+        }
+        todolistAPi.updateTask(todolistId, taskId, payload)
+            .then(res => {
+                dispatch(changeTaskTitleAC(taskId,title,todolistId))
+            })
+
+    }
 }
