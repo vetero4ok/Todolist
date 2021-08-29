@@ -3,11 +3,6 @@ import {TaskStatuses, TaskType, todolistAPi,} from '../Api/Api';
 import {AppThunk} from './Strore';
 import {Dispatch} from 'redux';
 
-type RemoveTaskAT = {
-    type: 'REMOVE-TASK'
-    taskId: string
-    todoListsID: string
-}
 
 type changeTaskStatusAT = {
     type: 'CHANGE-TASK-STATUS'
@@ -91,14 +86,12 @@ export const tasksReducer = (state = initialState, action: TasksActionType): Tas
             return state
     }
 }
-export const removeTaskAC = (taskId: string, todoListsID: string): RemoveTaskAT => {
-    return ({
+export const removeTaskAC = (taskId: string, todoListsID: string) => {
+    return {
         type: 'REMOVE-TASK',
         taskId: taskId,
         todoListsID: todoListsID
-
-    });
-
+    } as const
 }
 export const addTaskAC = (task: TaskType) => {
     return {
@@ -129,6 +122,7 @@ const setTasksAC = (task: Array<TaskType>, todolistId: string) => {
         todolistId,
     } as const
 }
+export type RemoveTaskAT = ReturnType<typeof removeTaskAC>
 export type AddTaskAT = ReturnType<typeof addTaskAC>
 export type SetTasksAT = ReturnType<typeof setTasksAC>
 export const setTasksTC = (todolistId: string): AppThunk => (dispatch: Dispatch) => {
@@ -142,7 +136,12 @@ export const addTaskTC = (todolistId: string, title: string): AppThunk => (dispa
     todolistAPi.createTask(todolistId, title)
         .then((res) => {
             dispatch(addTaskAC(res.data.data.item))
-            debugger
+        })
+}
+export const removeTaskTC = (todolistId: string, taskId: string): AppThunk => (dispatch: Dispatch) => {
+    todolistAPi.deleteTask(todolistId, taskId)
+        .then(res => {
+            dispatch(removeTaskAC(taskId, todolistId))
         })
 
 }
