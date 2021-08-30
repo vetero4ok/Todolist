@@ -8,7 +8,7 @@ import {
 } from './tasks-reducer';
 
 import {addTodoListAC, removeTodoListAC} from './todolist-reducer';
-import {TaskStatuses, TaskType, TodolistType} from '../Api/Api';
+import {TaskStatuses, TaskType, TodolistType} from '../../Api/Api';
 
 let startState: TasksStateType
 let todolistWithServer: TodolistType

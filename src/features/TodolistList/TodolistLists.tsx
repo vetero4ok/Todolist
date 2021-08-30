@@ -1,23 +1,28 @@
-import React, {useCallback, useEffect} from 'react';
-import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
-import {Menu} from '@material-ui/icons';
-import Todolist from './Componets/Todolist/Todolist';
-import {AddItemForm} from './Componets/AddItemForm/AddItemForm';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from './Store/Strore';
-import {addTaskTC, changeTaskStatusTC, changeTaskTitleTC, removeTaskTC, TasksStateType} from './Store/tasks-reducer';
+import {AppRootStateType} from '../../App/Strore';
 import {
     addTodolistTC,
-    ChangeTodoListFilterAC,
+    changeTodoListFilterAC,
     changeTodolistTitleTC,
     fetchTodolistsTC,
     FilterValuesType,
     removeTodolistTC,
     TodolistDomainType
-} from './Store/todolist-reducer';
-import {TaskStatuses, TaskType} from './Api/Api';
+} from './todolist-reducer';
+import {
+    addTaskTC,
+    changeTaskStatusTC,
+    changeTaskTitleTC,
+    removeTaskTC,
+    TasksStateType
+} from './tasks-reducer';
+import React, {useCallback, useEffect} from 'react';
+import {TaskStatuses, TaskType} from '../../Api/Api';
+import {Grid, Paper} from '@material-ui/core';
+import Todolist from './Todolist/Todolist';
+import {AddItemForm} from '../../Componets/AddItemForm/AddItemForm';
 
-export function AppWithRedux() {
+export const TodolistLists = () => {
     const todoLists = useSelector<AppRootStateType, TodolistDomainType[]>(state => state.todoLists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch()
@@ -33,12 +38,12 @@ export function AppWithRedux() {
         dispatch(addTaskTC(todoListsID, title))
     }, [dispatch])
     const changeTaskStatus = useCallback((taskID: string, status: TaskStatuses, todoListsID: string) => {
-       dispatch(changeTaskStatusTC(todoListsID,taskID,status))
+        dispatch(changeTaskStatusTC(todoListsID, taskID, status))
         //  dispatch(changeTaskStatusAC(taskID, status, todoListsID))
     }, [dispatch])
     const changeTaskTitle = useCallback((taskID: string, title: string, todoListsID: string) => {
-       dispatch(changeTaskTitleTC(todoListsID,taskID,title))
-       // dispatch(changeTaskTitleAC(taskID, title, todoListsID))
+        dispatch(changeTaskTitleTC(todoListsID, taskID, title))
+        // dispatch(changeTaskTitleAC(taskID, title, todoListsID))
     }, [dispatch])
     const removeTodoList = useCallback((todoListsID: string) => {
         dispatch(removeTodolistTC(todoListsID))
@@ -47,7 +52,7 @@ export function AppWithRedux() {
         dispatch(addTodolistTC(title))
     }, [dispatch])
     const changeTodoListFilter = useCallback((filter: FilterValuesType, todoListsID: string) => {
-        let action = ChangeTodoListFilterAC(todoListsID, filter)
+        let action = changeTodoListFilterAC(todoListsID, filter)
         dispatch(action)
     }, [dispatch])
     const changeTodoListTitle = useCallback((title: string, todoListsID: string) => {
@@ -83,34 +88,13 @@ export function AppWithRedux() {
     })
 
     return (
-        <div className="App">
-            <AppBar position={'static'}>
-                <Toolbar style={{justifyContent: 'space-between'}}>
-                    <IconButton color={'inherit'}>
-                        <Menu/>
-                    </IconButton>
-                    <Typography variant={'h6'}>
-                        Todolists
-                    </Typography>
-                    <Button
-                        color={'inherit'}
-                        variant={'outlined'}
-                    >Login</Button>
-                </Toolbar>
-            </AppBar>
-            <Container fixed>
-                <Grid container style={{padding: '20px 0px'}}>
-                    <AddItemForm addItem={addTodoList}/>
-                </Grid>
-                <Grid container spacing={5}>
-                    {todoListComponents}
-                </Grid>
+        <>
+            <Grid container style={{padding: '20px 0px'}}>
+                <AddItemForm addItem={addTodoList}/>
+            </Grid>
+            <Grid container spacing={5}>
+                {todoListComponents}
+            </Grid>
 
-
-            </Container>
-
-        </div>
-    );
+        </>);
 }
-
-
