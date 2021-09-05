@@ -1,6 +1,7 @@
 import {todolistAPi, TodolistType} from '../../Api/Api';
 import {AppThunk} from '../../App/Strore';
 import {Dispatch} from 'redux';
+import {appSetStatus, AppSetStatusAC} from '../../App/App-reducer';
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -34,28 +35,35 @@ export const changeTodoListTitleAC = (todoListsID: string, title: string) =>
 const setTodolists = (todolists: Array<TodolistType>) => ({type: 'SET-TODOLISTS', todolists} as const)
 
 export const fetchTodolistsTC = (): AppThunk => (dispatch: Dispatch) => {
+    dispatch(appSetStatus('loading'))
     todolistAPi.getTodolist()
         .then((res) => {
             dispatch(setTodolists(res.data))
+            dispatch(appSetStatus('succeeded'))
         })
 }
 export const addTodolistTC = (title: string): AppThunk => (dispatch: Dispatch) => {
+    dispatch(appSetStatus('loading'))
     todolistAPi.createTodolist(title)
         .then(res => {
             dispatch(addTodoListAC(res.data.data.item))
+            dispatch(appSetStatus('succeeded'))
         })
 }
 export const removeTodolistTC = (todolistId: string): AppThunk => (dispatch: Dispatch) => {
+    dispatch(appSetStatus('loading'))
     todolistAPi.deleteTodolist(todolistId)
         .then(res => {
             dispatch(removeTodoListAC(todolistId))
+            dispatch(appSetStatus('succeeded'))
         })
 }
 export const changeTodolistTitleTC = (title: string, todolistId: string): AppThunk => (dispatch: Dispatch) => {
+    dispatch(appSetStatus('loading'))
     todolistAPi.updateTodolist(title, todolistId)
         .then((res) => {
-
             dispatch(changeTodoListTitleAC(todolistId, title))
+            dispatch(appSetStatus('succeeded'))
         })
 }
 export type FilterValuesType = 'all' | 'active' | 'completed'
@@ -68,6 +76,7 @@ export type TodolistActionType =
     | ChangeTodoListFilterAT
     | ChangeTodoListTitleAT
     | SetTodolistsAT
+    | AppSetStatusAC
 type ChangeTodoListTitleAT = ReturnType<typeof changeTodoListTitleAC>
 type ChangeTodoListFilterAT = ReturnType<typeof changeTodoListFilterAC>
 export type RemoveTodolistAT = ReturnType<typeof removeTodoListAC>

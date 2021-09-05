@@ -2,6 +2,7 @@ import {TaskPriorities, TaskStatuses, TaskType, todolistAPi, UpdateTaskModelType
 import {AppThunk} from '../../App/Strore';
 import {Dispatch} from 'redux';
 import {AddTodoListAT, RemoveTodolistAT, SetTodolistsAT} from './todolist-reducer';
+import {appSetStatus, AppSetStatusAC} from '../../App/App-reducer';
 
 const initialState: TasksStateType = {}
 
@@ -53,22 +54,27 @@ const setTasksAC = (task: Array<TaskType>, todolistId: string) => ({type: 'SET-T
 
 // Thunk Creator
 export const setTasksTC = (todolistId: string): AppThunk => (dispatch: Dispatch) => {
+    dispatch(appSetStatus('loading'))
     todolistAPi.getTasks(todolistId)
         .then(res => {
-            console.log(res.data)
             dispatch(setTasksAC(res.data.items, todolistId))
+            dispatch(appSetStatus('succeeded'))
         })
 }
 export const addTaskTC = (todolistId: string, title: string): AppThunk => (dispatch: Dispatch) => {
+    dispatch(appSetStatus('loading'))
     todolistAPi.createTask(todolistId, title)
         .then((res) => {
             dispatch(addTaskAC(res.data.data.item))
+            dispatch(appSetStatus('succeeded'))
         })
 }
 export const removeTaskTC = (todolistId: string, taskId: string): AppThunk => (dispatch: Dispatch) => {
+    dispatch(appSetStatus('loading'))
     todolistAPi.deleteTask(todolistId, taskId)
         .then(res => {
             dispatch(removeTaskAC(taskId, todolistId))
+            dispatch(appSetStatus('succeeded'))
         })
 }
 
@@ -84,9 +90,11 @@ export const updateTasksTC = (todolistId: string, taskId: string, domainModel: U
             startDate: task.startDate,
             ...domainModel
         }
+        dispatch(appSetStatus('loading'))
         todolistAPi.updateTask(todolistId, taskId, payload)
             .then(res => {
                 dispatch(updateTaskAC(taskId, payload, todolistId))
+                dispatch(appSetStatus('succeeded'))
             })
     }
 }
@@ -107,6 +115,7 @@ export type TasksActionType =
     | SetTodolistsAT
     | SetTasksAT
     | UpdateTaskAT
+    | AppSetStatusAC
 
 
 export type TasksStateType = {

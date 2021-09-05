@@ -1,9 +1,13 @@
 import React from 'react';
-import {AppBar, Button, Container, IconButton, Toolbar, Typography} from '@material-ui/core';
+import {AppBar, Button, Container, IconButton, LinearProgress, Toolbar, Typography} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
 import {TodolistLists} from '../features/TodolistList/TodolistLists';
+import {useSelector} from 'react-redux';
+import {AppRootStateType} from './Strore';
+import {RequestStatusType} from './App-reducer';
 
 export function App() {
+    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
     return (
         <div className="App">
             <AppBar position={'static'}>
@@ -20,6 +24,7 @@ export function App() {
                     >Login</Button>
                 </Toolbar>
             </AppBar>
+            {status === 'loading' && <LinearProgress/>}
             <Container fixed>
                 <TodolistLists/>
             </Container>
