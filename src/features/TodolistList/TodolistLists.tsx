@@ -11,8 +11,7 @@ import {
 } from './todolist-reducer';
 import {
     addTaskTC,
-    changeTaskStatusTC,
-    changeTaskTitleTC,
+    updateTasksTC,
     removeTaskTC,
     TasksStateType
 } from './tasks-reducer';
@@ -38,12 +37,10 @@ export const TodolistLists = () => {
         dispatch(addTaskTC(todoListsID, title))
     }, [dispatch])
     const changeTaskStatus = useCallback((taskID: string, status: TaskStatuses, todoListsID: string) => {
-        dispatch(changeTaskStatusTC(todoListsID, taskID, status))
-        //  dispatch(changeTaskStatusAC(taskID, status, todoListsID))
+        dispatch(updateTasksTC(todoListsID, taskID, {status}))
     }, [dispatch])
     const changeTaskTitle = useCallback((taskID: string, title: string, todoListsID: string) => {
-        dispatch(changeTaskTitleTC(todoListsID, taskID, title))
-        // dispatch(changeTaskTitleAC(taskID, title, todoListsID))
+        dispatch(updateTasksTC(todoListsID, taskID, {title}))
     }, [dispatch])
     const removeTodoList = useCallback((todoListsID: string) => {
         dispatch(removeTodolistTC(todoListsID))

@@ -33,8 +33,6 @@ export const changeTodoListTitleAC = (todoListsID: string, title: string) =>
     ({type: 'CHANGE-TODOLIST-TITLE', todoListsID, title} as const)
 const setTodolists = (todolists: Array<TodolistType>) => ({type: 'SET-TODOLISTS', todolists} as const)
 
-
-
 export const fetchTodolistsTC = (): AppThunk => (dispatch: Dispatch) => {
     todolistAPi.getTodolist()
         .then((res) => {
