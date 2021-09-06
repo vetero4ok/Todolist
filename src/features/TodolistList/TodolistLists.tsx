@@ -67,8 +67,7 @@ export const TodolistLists = () => {
                     <Todolist
                         todoListsID={tl.id}
                         tasks={arrayTasksTodolistID}
-                        title={tl.title}
-                        filter={tl.filter}
+                        todolist = {tl}
                         removeTask={removeTask}
                         changeTodoListFilter={changeTodoListFilter}
                         addTask={addTask}

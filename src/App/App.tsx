@@ -5,9 +5,11 @@ import {TodolistLists} from '../features/TodolistList/TodolistLists';
 import {useSelector} from 'react-redux';
 import {AppRootStateType} from './Strore';
 import {RequestStatusType} from './App-reducer';
+import {ErrorSnackbar} from '../Componets/ErrorSnackbar';
 
 export function App() {
     const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
+
     return (
         <div className="App">
             <AppBar position={'static'}>
@@ -28,7 +30,7 @@ export function App() {
             <Container fixed>
                 <TodolistLists/>
             </Container>
-
+            <ErrorSnackbar/>
         </div>
     );
 }

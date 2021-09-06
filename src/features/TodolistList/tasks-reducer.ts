@@ -2,7 +2,7 @@ import {TaskPriorities, TaskStatuses, TaskType, todolistAPi, UpdateTaskModelType
 import {AppThunk} from '../../App/Strore';
 import {Dispatch} from 'redux';
 import {AddTodoListAT, RemoveTodolistAT, SetTodolistsAT} from './todolist-reducer';
-import {appSetStatus, AppSetStatusAC} from '../../App/App-reducer';
+import {appSetError, AppSetErrorAT, appSetStatus, AppSetStatusAT} from '../../App/App-reducer';
 
 const initialState: TasksStateType = {}
 
@@ -65,16 +65,30 @@ export const addTaskTC = (todolistId: string, title: string): AppThunk => (dispa
     dispatch(appSetStatus('loading'))
     todolistAPi.createTask(todolistId, title)
         .then((res) => {
-            dispatch(addTaskAC(res.data.data.item))
-            dispatch(appSetStatus('succeeded'))
+            if (res.data.resultCode === 0) {
+                dispatch(addTaskAC(res.data.data.item))
+                dispatch(appSetStatus('succeeded'))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(appSetError(res.data.messages[0]))
+                    dispatch(appSetStatus('failed'))
+                }
+            }
         })
 }
 export const removeTaskTC = (todolistId: string, taskId: string): AppThunk => (dispatch: Dispatch) => {
     dispatch(appSetStatus('loading'))
     todolistAPi.deleteTask(todolistId, taskId)
         .then(res => {
-            dispatch(removeTaskAC(taskId, todolistId))
-            dispatch(appSetStatus('succeeded'))
+            if (res.data.resultCode === 0) {
+                dispatch(removeTaskAC(taskId, todolistId))
+                dispatch(appSetStatus('succeeded'))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(appSetError(res.data.messages[0]))
+                    dispatch(appSetStatus('failed'))
+                }
+            }
         })
 }
 
@@ -93,8 +107,15 @@ export const updateTasksTC = (todolistId: string, taskId: string, domainModel: U
         dispatch(appSetStatus('loading'))
         todolistAPi.updateTask(todolistId, taskId, payload)
             .then(res => {
-                dispatch(updateTaskAC(taskId, payload, todolistId))
-                dispatch(appSetStatus('succeeded'))
+                if (res.data.resultCode === 0) {
+                    dispatch(updateTaskAC(taskId, payload, todolistId))
+                    dispatch(appSetStatus('succeeded'))
+                } else {
+                    if (res.data.messages.length) {
+                        dispatch(appSetError(res.data.messages[0]))
+                        dispatch(appSetStatus('failed'))
+                    }
+                }
             })
     }
 }
@@ -115,7 +136,8 @@ export type TasksActionType =
     | SetTodolistsAT
     | SetTasksAT
     | UpdateTaskAT
-    | AppSetStatusAC
+    | AppSetStatusAT
+    | AppSetErrorAT
 
 
 export type TasksStateType = {
