@@ -1,7 +1,9 @@
 import {todolistAPi, TodolistType} from '../../Api/Api';
 import {AppThunk} from '../../App/Strore';
 import {Dispatch} from 'redux';
-import {appSetError, AppSetErrorAT, appSetStatus, AppSetStatusAT, RequestStatusType} from '../../App/App-reducer';
+import {AppSetErrorAT, appSetStatus, AppSetStatusAT, RequestStatusType} from '../../App/App-reducer';
+import {handleServerAppError, handleServerNetworkError} from '../../Utils/error-utils.tserror-utils';
+import {AxiosError} from 'axios';
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -54,12 +56,12 @@ export const addTodolistTC = (title: string): AppThunk => (dispatch: Dispatch) =
                 dispatch(addTodoListAC(res.data.data.item))
                 dispatch(appSetStatus('succeeded'))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(appSetError(res.data.messages[0]))
-                    dispatch(appSetStatus('failed'))
-                }
+                handleServerNetworkError<{}>(dispatch, res.data)
             }
 
+        })
+        .catch((err: AxiosError) => {
+            handleServerAppError(dispatch, err.message)
         })
 }
 export const removeTodolistTC = (todolistId: string): AppThunk => (dispatch: Dispatch) => {
@@ -71,11 +73,11 @@ export const removeTodolistTC = (todolistId: string): AppThunk => (dispatch: Dis
                 dispatch(removeTodoListAC(todolistId))
                 dispatch(appSetStatus('succeeded'))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(appSetError(res.data.messages[0]))
-                    dispatch(appSetStatus('failed'))
-                }
+                handleServerNetworkError<{}>(dispatch, res.data)
             }
+        })
+        .catch((err: AxiosError) => {
+            handleServerAppError(dispatch, err.message)
         })
 }
 export const changeTodolistTitleTC = (title: string, todolistId: string): AppThunk => (dispatch: Dispatch) => {
@@ -86,12 +88,13 @@ export const changeTodolistTitleTC = (title: string, todolistId: string): AppThu
                 dispatch(changeTodoListTitleAC(todolistId, title))
                 dispatch(appSetStatus('succeeded'))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(appSetError(res.data.messages[0]))
-                    dispatch(appSetStatus('failed'))
-                }
+                handleServerNetworkError<{}>(dispatch, res.data)
             }
         })
+        .catch((err: AxiosError) => {
+            handleServerAppError(dispatch, err.message)
+        })
+
 }
 export type FilterValuesType = 'all' | 'active' | 'completed'
 export type TodolistDomainType = TodolistType & {

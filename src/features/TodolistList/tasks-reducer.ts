@@ -3,6 +3,8 @@ import {AppThunk} from '../../App/Strore';
 import {Dispatch} from 'redux';
 import {AddTodoListAT, RemoveTodolistAT, SetTodolistsAT} from './todolist-reducer';
 import {appSetError, AppSetErrorAT, appSetStatus, AppSetStatusAT, RequestStatusType} from '../../App/App-reducer';
+import {AxiosError} from 'axios';
+import {handleServerAppError} from '../../Utils/error-utils.tserror-utils';
 
 const initialState: TasksStateType = {}
 
@@ -81,6 +83,10 @@ export const addTaskTC = (todolistId: string, title: string): AppThunk => (dispa
                 }
             }
         })
+        .catch((err: AxiosError) => {
+            handleServerAppError(dispatch, err.message)
+        })
+
 }
 export const removeTaskTC = (todolistId: string, taskId: string): AppThunk => (dispatch: Dispatch) => {
     dispatch(appSetStatus('loading'))
@@ -98,6 +104,9 @@ export const removeTaskTC = (todolistId: string, taskId: string): AppThunk => (d
                     dispatch(updateTaskEntityStatus('failed',todolistId,taskId))
                 }
             }
+        })
+        .catch((err: AxiosError) => {
+            handleServerAppError(dispatch, err.message)
         })
 }
 
@@ -128,6 +137,9 @@ export const updateTasksTC = (todolistId: string, taskId: string, domainModel: U
                         dispatch(updateTaskEntityStatus('failed',todolistId,taskId))
                     }
                 }
+            })
+            .catch((err: AxiosError) => {
+                handleServerAppError(dispatch, err.message)
             })
     }
 }
