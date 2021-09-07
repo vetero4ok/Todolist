@@ -2,7 +2,7 @@ import {
     addTaskAC,
     removeTaskAC,
     tasksReducer,
-    TasksStateType, updateTaskAC
+    TasksStateType, updateTaskAC, updateTaskEntityStatus
 } from './tasks-reducer';
 
 import {addTodoListAC, removeTodoListAC} from './todolist-reducer';
@@ -21,41 +21,41 @@ beforeEach(() => {
     taskWithServer = {
         id: '1', title: 'juce', description: '', todoListId: 'todolistId2',
         order: 0, status: TaskStatuses.New, priority: 0,
-        startDate: '', deadline: '', addedDate: ''
+        startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle'
     }
     startState = {
         'todolistId1': [
             {
                 id: '1', title: 'CSS', description: '', todoListId: 'todolistId1',
                 order: 0, status: TaskStatuses.New, priority: 0,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle'
             },
             {
                 id: '2', title: 'JS', description: '', todoListId: 'todolistId1',
                 order: 0, status: TaskStatuses.Completed, priority: 0,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle',
             },
             {
                 id: '3', title: 'React', description: '', todoListId: 'todolistId1',
                 order: 0, status: TaskStatuses.New, priority: 0,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle',
             }
         ],
         'todolistId2': [
             {
                 id: '1', title: 'bread', description: '', todoListId: 'todolistId2',
                 order: 0, status: TaskStatuses.New, priority: 0,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle',
             },
             {
                 id: '2', title: 'milk', description: '', todoListId: 'todolistId2',
                 order: 0, status: TaskStatuses.Completed, priority: 0,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle',
             },
             {
                 id: '3', title: 'tea', description: '', todoListId: 'todolistId2',
                 order: 0, status: TaskStatuses.New, priority: 0,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle',
             }
         ]
     };
@@ -71,29 +71,29 @@ test('correct task should be deleted from correct array', () => {
             {
                 id: '1', title: 'CSS', description: '', todoListId: 'todolistId1',
                 order: 0, status: TaskStatuses.New, priority: 0,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle',
             },
             {
                 id: '2', title: 'JS', description: '', todoListId: 'todolistId1',
                 order: 0, status: TaskStatuses.Completed, priority: 0,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle',
             },
             {
                 id: '3', title: 'React', description: '', todoListId: 'todolistId1',
                 order: 0, status: TaskStatuses.New, priority: 0,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle',
             }
         ],
         'todolistId2': [
             {
                 id: '1', title: 'bread', description: '', todoListId: 'todolistId2',
                 order: 0, status: TaskStatuses.New, priority: 0,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle',
             },
             {
                 id: '3', title: 'tea', description: '', todoListId: 'todolistId2',
                 order: 0, status: TaskStatuses.New, priority: 0,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus: 'idle',
             }
         ]
     });
@@ -118,6 +118,13 @@ test('update task of specified task should be changed', () => {
     expect(endState['todolistId1'][1].status).toBe(TaskStatuses.Completed);
 
 });
+test('update task entityStatus of specified task should be changed', () => {
+    const action = updateTaskEntityStatus('succeeded', 'todolistId1', '1')
+    const endState = tasksReducer(startState, action)
+    expect(endState['todolistId1'][0].entityTaskStatus).toBe('succeeded')
+    expect(endState['todolistId1'][0].entityTaskStatus).toBe('succeeded')
+
+})
 
 test('new array should be added when new todolist is added', () => {
     const action = addTodoListAC(todolistWithServer);
@@ -140,5 +147,7 @@ test('property with todolistId should be deleted', () => {
     expect(keys.length).toBe(1);
     expect(endState['todolistId2']).not.toBeDefined();
 });
+
+
 
 

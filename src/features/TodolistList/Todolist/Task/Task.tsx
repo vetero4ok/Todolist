@@ -30,15 +30,19 @@ export const Task = React.memo(({task, todoListsID, changeTaskTitle, ...props}: 
                     color={'primary'}
                     checked={task.status === TaskStatuses.Completed}
                     onChange={changeTaskStatus}
+                    disabled = {task.entityTaskStatus === 'loading'}
                 />
                  <EditableSpan
                      title={task.title}
                      changeTitle={changeTaskTitleCallback}
+                     //disabled = {task.entityTaskStatus === 'loading'}
 
                  />
 
                </span>
-            <IconButton aria-label="delete" onClick={removeTask}>
+            <IconButton aria-label="delete" onClick={removeTask}
+                        disabled = {task.entityTaskStatus === 'loading'}
+            >
                 <Delete/>
             </IconButton>
         </li>

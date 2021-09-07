@@ -35,39 +35,39 @@ const initialGlobalState: AppRootStateType = {
             {
                 id: v1(), title: 'HTML', description: '', todoListId: 'todolistId1',
                 order: 0, status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus:'idle'
             },
             {
                 id: v1(), title: 'CSS', description: '', todoListId: 'todolistId1',
                 order: 0, status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus:'idle'
             },
             {
                 id: v1(), title: 'Redux', description: '', todoListId: 'todolistId1',
                 order: 0, status: TaskStatuses.New, priority: TaskPriorities.Low,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus:'idle'
             },
             {
                 id: v1(), title: 'React', description: '', todoListId: 'todolistId1',
                 order: 0, status: TaskStatuses.New, priority: TaskPriorities.Low,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus:'idle'
             },
         ],
         ['todolistId2']: [
             {
                 id: v1(), title: 'milk', description: '', todoListId: 'todolistId2',
                 order: 0, status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus:'idle'
             },
             {
                 id: v1(), title: 'Bred', description: '', todoListId: 'todolistId2',
                 order: 0, status: TaskStatuses.Completed, priority: TaskPriorities.Low,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus:'idle'
             },
             {
                 id: v1(), title: 'meat', description: '', todoListId: 'todolistId2',
                 order: 0, status: TaskStatuses.New, priority: TaskPriorities.Low,
-                startDate: '', deadline: '', addedDate: ''
+                startDate: '', deadline: '', addedDate: '', entityTaskStatus:'idle'
             },
         ]
     }

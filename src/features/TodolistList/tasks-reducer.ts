@@ -2,7 +2,7 @@ import {TaskPriorities, TaskStatuses, TaskType, todolistAPi, UpdateTaskModelType
 import {AppThunk} from '../../App/Strore';
 import {Dispatch} from 'redux';
 import {AddTodoListAT, RemoveTodolistAT, SetTodolistsAT} from './todolist-reducer';
-import {appSetError, AppSetErrorAT, appSetStatus, AppSetStatusAT} from '../../App/App-reducer';
+import {appSetError, AppSetErrorAT, appSetStatus, AppSetStatusAT, RequestStatusType} from '../../App/App-reducer';
 
 const initialState: TasksStateType = {}
 
@@ -39,6 +39,10 @@ export const tasksReducer = (state = initialState, action: TasksActionType): Tas
             stateCopy[action.todolistId] = action.task
             return stateCopy
         }
+        case 'UPDATE-TASK-ENTITY-STATUS':
+            return {...state,
+                [action.todolistId]: state[action.todolistId]
+                    .map(t=> t.id === action.taskId ? {...t, entityTaskStatus: action.entityStatus} : t)}
         default:
             return state
     }
@@ -49,8 +53,10 @@ export const removeTaskAC = (taskId: string, todoListsID: string) =>
 export const addTaskAC = (task: TaskType) => ({type: 'ADD-TASK', task} as const)
 export const updateTaskAC = (taskID: string, payload: UpdateTaskModelType, todoListsID: string) =>
     ({type: 'UPDATE-TASKS', taskID, payload, todoListsID} as const)
-
 const setTasksAC = (task: Array<TaskType>, todolistId: string) => ({type: 'SET-TASKS', task, todolistId,} as const)
+export const updateTaskEntityStatus = (entityStatus: RequestStatusType, todolistId: string, taskId: string) =>
+    ({type: 'UPDATE-TASK-ENTITY-STATUS', entityStatus, todolistId, taskId} as const)
+
 
 // Thunk Creator
 export const setTasksTC = (todolistId: string): AppThunk => (dispatch: Dispatch) => {
@@ -78,15 +84,18 @@ export const addTaskTC = (todolistId: string, title: string): AppThunk => (dispa
 }
 export const removeTaskTC = (todolistId: string, taskId: string): AppThunk => (dispatch: Dispatch) => {
     dispatch(appSetStatus('loading'))
+    dispatch(updateTaskEntityStatus('loading',todolistId,taskId))
     todolistAPi.deleteTask(todolistId, taskId)
         .then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(removeTaskAC(taskId, todolistId))
                 dispatch(appSetStatus('succeeded'))
+                dispatch(updateTaskEntityStatus('succeeded',todolistId,taskId))
             } else {
                 if (res.data.messages.length) {
                     dispatch(appSetError(res.data.messages[0]))
                     dispatch(appSetStatus('failed'))
+                    dispatch(updateTaskEntityStatus('failed',todolistId,taskId))
                 }
             }
         })
@@ -104,16 +113,19 @@ export const updateTasksTC = (todolistId: string, taskId: string, domainModel: U
             startDate: task.startDate,
             ...domainModel
         }
+        dispatch(updateTaskEntityStatus('loading',todolistId,taskId))
         dispatch(appSetStatus('loading'))
         todolistAPi.updateTask(todolistId, taskId, payload)
             .then(res => {
                 if (res.data.resultCode === 0) {
                     dispatch(updateTaskAC(taskId, payload, todolistId))
                     dispatch(appSetStatus('succeeded'))
+                    dispatch(updateTaskEntityStatus('succeeded',todolistId,taskId))
                 } else {
                     if (res.data.messages.length) {
                         dispatch(appSetError(res.data.messages[0]))
                         dispatch(appSetStatus('failed'))
+                        dispatch(updateTaskEntityStatus('failed',todolistId,taskId))
                     }
                 }
             })
@@ -138,12 +150,13 @@ export type TasksActionType =
     | UpdateTaskAT
     | AppSetStatusAT
     | AppSetErrorAT
+    | UpdateTaskEntityStatus
 
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
-
+export type UpdateTaskEntityStatus = ReturnType<typeof updateTaskEntityStatus>
 export type UpdateTaskAT = ReturnType<typeof updateTaskAC>
 export type RemoveTaskAT = ReturnType<typeof removeTaskAC>
 export type AddTaskAT = ReturnType<typeof addTaskAC>

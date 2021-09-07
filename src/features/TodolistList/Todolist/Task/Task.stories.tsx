@@ -52,7 +52,8 @@ TaskIsDoneStories.args = {
         priority: 0,
         startDate: '',
         deadline: 'string',
-        addedDate: ''
+        addedDate: '',
+        entityTaskStatus:'idle'
     },
     todoListsID: 'todolistId1',
 };
@@ -65,6 +66,7 @@ TaskISNotDoneStories.args = {
         priority: 0,
         startDate: '',
         deadline: 'string',
-        addedDate: ''},
+        addedDate: '',
+        entityTaskStatus:'idle'},
     todoListsID: 'todolistId1',
 };
