@@ -20,13 +20,19 @@ import {TaskStatuses, TaskType} from '../../Api/Api';
 import {Grid, Paper} from '@material-ui/core';
 import Todolist from './Todolist/Todolist';
 import {AddItemForm} from '../../Componets/AddItemForm/AddItemForm';
+import {Redirect} from 'react-router-dom';
 
 export const TodolistLists = () => {
     const todoLists = useSelector<AppRootStateType, TodolistDomainType[]>(state => state.todoLists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
     const dispatch = useDispatch()
 
     useEffect(() => {
+    //   debugger
+        if (!isLoggedIn){
+            return
+        }
         dispatch(fetchTodolistsTC())
     }, [])
 
@@ -56,6 +62,10 @@ export const TodolistLists = () => {
         dispatch(changeTodolistTitleTC(title, todoListsID))
     }, [dispatch])
 
+    if(!isLoggedIn){
+       // debugger
+        return <Redirect to={'/login'}/>
+    }
 //UI: User Interface
 
     const todoListComponents = todoLists.map(tl => {

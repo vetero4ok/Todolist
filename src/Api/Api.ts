@@ -9,6 +9,55 @@ const instance = axios.create({
     }
 })
 
+
+export const todolistAPi = {
+    getTodolist() {
+        return instance.get<Array<TodolistType>>(`todo-lists`)
+    },
+    createTodolist(title: string) {
+        return instance.post<CommonResponseType<{ item: TodolistType }>>(`todo-lists`, {title})
+    },
+    deleteTodolist(id: string) {
+        return instance.delete<CommonResponseType>(`todo-lists/${id}`)
+    },
+    updateTodolist(title: string, id: string) {
+        return instance.put<CommonResponseType>(`todo-lists/${id}`, {title})
+    },
+    getTasks(todolistId: string) {
+        return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
+    },
+    createTask(todolistId: string, title: string) {
+        return instance.post<CommonResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, {title})
+    },
+    deleteTask(todolistId: string, taskId: string) {
+        return instance.delete<CommonResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
+    },
+    updateTask(todolistId: string, taskId: string, payload: UpdateTaskModelType) {
+        return instance.put<CommonResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, payload)
+    },
+}
+export const authAPI = {
+    login(payload:LoginParamsType) {
+        return instance.post<CommonResponseType<{userId:string}>>(`auth/login`,payload)
+    },
+    logout() {
+        return instance.delete<CommonResponseType>(`auth/login`)
+    },
+    me(){
+        return instance.get<CommonResponseType<MeResponseType>>(`auth/me`)
+    }
+}
+export type MeResponseType = {
+    id: number
+    email: string
+    login: string
+}
+export type LoginParamsType = {
+    email:string
+    password:string
+    rememberMe:boolean
+    captcha?:string
+}
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
@@ -63,33 +112,4 @@ export type GetTasksResponse = {
     error:string | null
     totalCount:number
     items:Array<TaskType>
-}
-
-export const todolistAPi = {
-    getTodolist() {
-        return instance.get<Array<TodolistType>>(`todo-lists`)
-    },
-    createTodolist(title: string) {
-        return instance.post<CommonResponseType<{ item: TodolistType }>>(`todo-lists`, {title})
-    },
-    deleteTodolist(id: string) {
-        return instance.delete<CommonResponseType>(`todo-lists/${id}`)
-    },
-    updateTodolist(title: string, id: string) {
-        return instance.put<CommonResponseType>(`todo-lists/${id}`, {title})
-    },
-    getTasks(todolistId: string) {
-        return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
-    },
-    createTask(todolistId: string, title: string) {
-        return instance.post<CommonResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, {title})
-    },
-    deleteTask(todolistId: string, taskId: string) {
-        return instance.delete<CommonResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
-    },
-    updateTask(todolistId: string, taskId: string, payload: UpdateTaskModelType) {
-        return instance.put<CommonResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, payload)
-    },
-
-
 }
