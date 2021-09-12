@@ -4,6 +4,8 @@ import {Dispatch} from 'redux';
 import {AppSetErrorAT, appSetStatus, AppSetStatusAT, RequestStatusType} from '../../App/App-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../Utils/error-utils.tserror-utils';
 import {AxiosError} from 'axios';
+import {setTasksTC} from './tasks-reducer';
+import {ClearDataAfterLogoutAppAT} from '../Login/authReducer';
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -25,6 +27,8 @@ export const todoListsReducer = (state = initialState, action: TodolistActionTyp
         }
         case 'SET-ENTITY-STATUS':
             return state.map(tl => tl.id === action.todolistId ? {...tl, entityStatus: action.entityStatus} : tl)
+        case 'LOGIN/CLEAR-DATA':
+            return []
         default:
             return state
     }
@@ -40,12 +44,18 @@ const setTodolists = (todolists: Array<TodolistType>) => ({type: 'SET-TODOLISTS'
 const setEntityStatus = (entityStatus: RequestStatusType, todolistId: string) =>
     ({type: 'SET-ENTITY-STATUS', entityStatus, todolistId}) as const
 
-export const fetchTodolistsTC = (): AppThunk => (dispatch: Dispatch) => {
+export const fetchTodolistsTC = (): AppThunk => (dispatch) => {
     dispatch(appSetStatus('loading'))
     todolistAPi.getTodolist()
         .then((res) => {
             dispatch(setTodolists(res.data))
             dispatch(appSetStatus('succeeded'))
+            return res.data
+        })
+        .then((res) => {
+            res.forEach(todo => {
+                dispatch(setTasksTC(todo.id))
+            })
         })
 }
 export const addTodolistTC = (title: string): AppThunk => (dispatch: Dispatch) => {
@@ -101,6 +111,14 @@ export type TodolistDomainType = TodolistType & {
     filter: FilterValuesType
     entityStatus: RequestStatusType
 }
+
+type  SetEntityStatusAT = ReturnType<typeof setEntityStatus>
+type ChangeTodoListTitleAT = ReturnType<typeof changeTodoListTitleAC>
+type ChangeTodoListFilterAT = ReturnType<typeof changeTodoListFilterAC>
+export type RemoveTodolistAT = ReturnType<typeof removeTodoListAC>
+export type AddTodoListAT = ReturnType<typeof addTodoListAC>
+export type SetTodolistsAT = ReturnType<typeof setTodolists>
+
 export type TodolistActionType =
     | RemoveTodolistAT
     | AddTodoListAT
@@ -110,9 +128,4 @@ export type TodolistActionType =
     | AppSetStatusAT
     | AppSetErrorAT
     | SetEntityStatusAT
-type  SetEntityStatusAT = ReturnType<typeof setEntityStatus>
-type ChangeTodoListTitleAT = ReturnType<typeof changeTodoListTitleAC>
-type ChangeTodoListFilterAT = ReturnType<typeof changeTodoListFilterAC>
-export type RemoveTodolistAT = ReturnType<typeof removeTodoListAC>
-export type AddTodoListAT = ReturnType<typeof addTodoListAC>
-export type SetTodolistsAT = ReturnType<typeof setTodolists>
+    | ClearDataAfterLogoutAppAT

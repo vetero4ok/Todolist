@@ -5,6 +5,7 @@ import {AddTodoListAT, RemoveTodolistAT, SetTodolistsAT} from './todolist-reduce
 import {appSetError, AppSetErrorAT, appSetStatus, AppSetStatusAT, RequestStatusType} from '../../App/App-reducer';
 import {AxiosError} from 'axios';
 import {handleServerAppError} from '../../Utils/error-utils.tserror-utils';
+import {ClearDataAfterLogoutAppAT} from '../Login/authReducer';
 
 const initialState: TasksStateType = {}
 
@@ -37,14 +38,19 @@ export const tasksReducer = (state = initialState, action: TasksActionType): Tas
             return stateCopy
         }
         case 'SET-TASKS': {
+
             let stateCopy = {...state}
             stateCopy[action.todolistId] = action.task
             return stateCopy
         }
         case 'UPDATE-TASK-ENTITY-STATUS':
-            return {...state,
+            return {
+                ...state,
                 [action.todolistId]: state[action.todolistId]
-                    .map(t=> t.id === action.taskId ? {...t, entityTaskStatus: action.entityStatus} : t)}
+                    .map(t => t.id === action.taskId ? {...t, entityTaskStatus: action.entityStatus} : t)
+            }
+        case 'LOGIN/CLEAR-DATA':
+            return {}
         default:
             return state
     }
@@ -90,18 +96,18 @@ export const addTaskTC = (todolistId: string, title: string): AppThunk => (dispa
 }
 export const removeTaskTC = (todolistId: string, taskId: string): AppThunk => (dispatch: Dispatch) => {
     dispatch(appSetStatus('loading'))
-    dispatch(updateTaskEntityStatus('loading',todolistId,taskId))
+    dispatch(updateTaskEntityStatus('loading', todolistId, taskId))
     todolistAPi.deleteTask(todolistId, taskId)
         .then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(removeTaskAC(taskId, todolistId))
                 dispatch(appSetStatus('succeeded'))
-                dispatch(updateTaskEntityStatus('succeeded',todolistId,taskId))
+                dispatch(updateTaskEntityStatus('succeeded', todolistId, taskId))
             } else {
                 if (res.data.messages.length) {
                     dispatch(appSetError(res.data.messages[0]))
                     dispatch(appSetStatus('failed'))
-                    dispatch(updateTaskEntityStatus('failed',todolistId,taskId))
+                    dispatch(updateTaskEntityStatus('failed', todolistId, taskId))
                 }
             }
         })
@@ -122,19 +128,19 @@ export const updateTasksTC = (todolistId: string, taskId: string, domainModel: U
             startDate: task.startDate,
             ...domainModel
         }
-        dispatch(updateTaskEntityStatus('loading',todolistId,taskId))
+        dispatch(updateTaskEntityStatus('loading', todolistId, taskId))
         dispatch(appSetStatus('loading'))
         todolistAPi.updateTask(todolistId, taskId, payload)
             .then(res => {
                 if (res.data.resultCode === 0) {
                     dispatch(updateTaskAC(taskId, payload, todolistId))
                     dispatch(appSetStatus('succeeded'))
-                    dispatch(updateTaskEntityStatus('succeeded',todolistId,taskId))
+                    dispatch(updateTaskEntityStatus('succeeded', todolistId, taskId))
                 } else {
                     if (res.data.messages.length) {
                         dispatch(appSetError(res.data.messages[0]))
                         dispatch(appSetStatus('failed'))
-                        dispatch(updateTaskEntityStatus('failed',todolistId,taskId))
+                        dispatch(updateTaskEntityStatus('failed', todolistId, taskId))
                     }
                 }
             })
@@ -151,6 +157,15 @@ export type UpdateDomainTaskModelType = {
     startDate?: string
     deadline?: string
 }
+export type TasksStateType = {
+    [key: string]: Array<TaskType>
+}
+export type UpdateTaskEntityStatus = ReturnType<typeof updateTaskEntityStatus>
+export type UpdateTaskAT = ReturnType<typeof updateTaskAC>
+export type RemoveTaskAT = ReturnType<typeof removeTaskAC>
+export type AddTaskAT = ReturnType<typeof addTaskAC>
+export type SetTasksAT = ReturnType<typeof setTasksAC>
+
 
 export type TasksActionType =
     | RemoveTaskAT
@@ -163,13 +178,4 @@ export type TasksActionType =
     | AppSetStatusAT
     | AppSetErrorAT
     | UpdateTaskEntityStatus
-
-
-export type TasksStateType = {
-    [key: string]: Array<TaskType>
-}
-export type UpdateTaskEntityStatus = ReturnType<typeof updateTaskEntityStatus>
-export type UpdateTaskAT = ReturnType<typeof updateTaskAC>
-export type RemoveTaskAT = ReturnType<typeof removeTaskAC>
-export type AddTaskAT = ReturnType<typeof addTaskAC>
-export type SetTasksAT = ReturnType<typeof setTasksAC>
+    | ClearDataAfterLogoutAppAT

@@ -11,7 +11,7 @@ type InitialStateType = typeof initialState
 
 export const authReducer = (state: InitialStateType = initialState, action: AuthActionsType): InitialStateType => {
     switch (action.type) {
-        case 'login/SET-IS-LOGGED-IN':
+        case 'LOGIN/SET-IS-LOGGED-IN':
             return {...state, isLoggedIn: action.value}
         default:
             return state
@@ -19,7 +19,8 @@ export const authReducer = (state: InitialStateType = initialState, action: Auth
 }
 // actions
 export const setIsLoggedInAC = (value: boolean) =>
-    ({type: 'login/SET-IS-LOGGED-IN', value} as const)
+    ({type: 'LOGIN/SET-IS-LOGGED-IN', value} as const)
+export const clearDataAfterLogoutAppAC = () => ({type: 'LOGIN/CLEAR-DATA'} as const)
 
 // thunks
 export const loginTC = (payload: LoginParamsType): AppThunk => (dispatch) => {
@@ -47,6 +48,7 @@ export const logoutTC = (): AppThunk => (dispatch) => {
             if (res.data.resultCode === 0) {
                 dispatch(setIsLoggedInAC(false))
                 dispatch(appSetStatus('succeeded'))
+                dispatch(clearDataAfterLogoutAppAC())
             } else {
                 if (res.data.messages.length) {
                     dispatch(appSetError(res.data.messages[0]))
@@ -61,7 +63,9 @@ export const logoutTC = (): AppThunk => (dispatch) => {
 
 // types
 export type SetIsLoggedInAT = ReturnType<typeof setIsLoggedInAC>
+export type ClearDataAfterLogoutAppAT = ReturnType<typeof clearDataAfterLogoutAppAC>
 export type AuthActionsType =
     | SetIsLoggedInAT
     | AppSetStatusAT
     | AppSetErrorAT
+    | ClearDataAfterLogoutAppAT
