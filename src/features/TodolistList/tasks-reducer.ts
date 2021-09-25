@@ -1,5 +1,5 @@
 import {TaskPriorities, TaskStatuses, TaskType, todolistAPi, UpdateTaskModelType,} from '../../Api/Api';
-import {AppThunk} from '../../App/Strore';
+import {AppThunk} from '../../App/Store';
 import {Dispatch} from 'redux';
 import {AddTodoListAT, RemoveTodolistAT, SetTodolistsAT} from './todolist-reducer';
 import {appSetError, AppSetErrorAT, appSetStatus, AppSetStatusAT, RequestStatusType} from '../../App/App-reducer';

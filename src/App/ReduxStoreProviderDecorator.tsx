@@ -1,4 +1,4 @@
-import {AppRootStateType,} from './Strore';
+import {AppRootStateType,} from './Store';
 import {Provider} from 'react-redux';
 import React from 'react';
 import {v1} from 'uuid';

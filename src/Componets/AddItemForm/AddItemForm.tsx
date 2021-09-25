@@ -7,7 +7,6 @@ export type AddItemFormProps = {
     disabled?: boolean
 }
 export const AddItemForm = React.memo((props: AddItemFormProps) => {
-    //console.log('AddItemForm')
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
 

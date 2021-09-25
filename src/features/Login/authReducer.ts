@@ -1,4 +1,4 @@
-import {AppThunk} from '../../App/Strore';
+import {AppThunk} from '../../App/Store';
 import {appSetError, AppSetErrorAT, appSetStatus, AppSetStatusAT} from '../../App/App-reducer';
 import {authAPI, LoginParamsType} from '../../Api/Api';
 import {AxiosError} from 'axios';
@@ -25,6 +25,7 @@ export const clearDataAfterLogoutAppAC = () => ({type: 'LOGIN/CLEAR-DATA'} as co
 // thunks
 export const loginTC = (payload: LoginParamsType): AppThunk => (dispatch) => {
     dispatch(appSetStatus('loading'))
+ //   debugger
     authAPI.login(payload)
         .then((res) => {
             if (res.data.resultCode === 0) {

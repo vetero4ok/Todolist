@@ -1,4 +1,4 @@
-import {AppThunk} from './Strore';
+import {AppThunk} from './Store';
 import {authAPI} from '../Api/Api';
 import {setIsLoggedInAC, SetIsLoggedInAT} from '../features/Login/authReducer';
 
@@ -19,6 +19,7 @@ export const appReducer = (state: InitialStateType = initialState, action: AppAc
         case 'APP/SET-ERROR':
             return {...state, error: action.error}
         case 'APP/SET-IS-INITIALIZE':
+
             return {...state, isInitialized: action.isInitialize}
         default:
             return state
@@ -30,6 +31,8 @@ export const appSetError = (error: string | null) => ({type: 'APP/SET-ERROR', er
 export const setIsInitialize = (isInitialize: boolean) => ({type: 'APP/SET-IS-INITIALIZE', isInitialize} as const)
 //TC
 export const initializeAppTC = (): AppThunk => (dispatch) => {
+
+
     authAPI.me()
         .then((res) => {
             if (res.data.resultCode === 0){

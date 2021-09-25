@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from '../../App/Strore';
+import {AppRootStateType} from '../../App/Store';
 import {
     addTodolistTC,
     changeTodoListFilterAC,
@@ -29,7 +29,7 @@ export const TodolistLists = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-    //   debugger
+
         if (!isLoggedIn){
             return
         }
@@ -63,7 +63,7 @@ export const TodolistLists = () => {
     }, [dispatch])
 
     if(!isLoggedIn){
-       // debugger
+
         return <Redirect to={'/login'}/>
     }
 //UI: User Interface

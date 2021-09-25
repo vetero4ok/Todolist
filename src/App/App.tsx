@@ -12,7 +12,7 @@ import {
 import {Menu} from '@material-ui/icons';
 import {TodolistLists} from '../features/TodolistList/TodolistLists';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from './Strore';
+import {AppRootStateType} from './Store';
 import {initializeAppTC, RequestStatusType} from './App-reducer';
 import {ErrorSnackbar} from '../Componets/ErrorSnackbar/ErrorSnackbar';
 import {Redirect, Route, Switch} from 'react-router-dom';
@@ -26,18 +26,15 @@ export function App() {
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
     const dispatch = useDispatch()
     useEffect(() => {
-       // debugger
         dispatch(initializeAppTC())
-    },[])
+    }, [])
     if (!isInitialized) {
-       // debugger
         return <div
             style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
             <CircularProgress/>
         </div>
     }
     const onClickHandler = () => {
-       // debugger
         dispatch(logoutTC())
     }
     return (
@@ -51,8 +48,8 @@ export function App() {
                         Todolists
                     </Typography>
                     {isLoggedIn ?
-                    <Button onClick={onClickHandler} color={'inherit'} variant={'outlined'}>Log out</Button>
-                    : <div> </div>
+                        <Button onClick={onClickHandler} color={'inherit'} variant={'outlined'}>Log out</Button>
+                        : <div></div>
                     }
                 </Toolbar>
             </AppBar>
@@ -61,8 +58,7 @@ export function App() {
                 <Switch>
                     <Route exact path={'/'} render={() => <TodolistLists/>}/>
                     <Route path={'/login'} render={() => <Login/>}/>
-                    <Route path={'/404'}
-                           render={() => <Error404/>}/>
+                    <Route path={'/404'} render={() => <Error404/>}/>
                     <Redirect from={'*'} to={'/404'}/>
                 </Switch>
             </Container>

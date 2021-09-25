@@ -1,5 +1,5 @@
 import {todolistAPi, TodolistType} from '../../Api/Api';
-import {AppThunk} from '../../App/Strore';
+import {AppThunk} from '../../App/Store';
 import {Dispatch} from 'redux';
 import {AppSetErrorAT, appSetStatus, AppSetStatusAT, RequestStatusType} from '../../App/App-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../Utils/error-utils.tserror-utils';

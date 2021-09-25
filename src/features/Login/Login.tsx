@@ -3,7 +3,7 @@ import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from '../../App/Strore';
+import {AppRootStateType} from '../../App/Store';
 import {Redirect} from 'react-router-dom';
 import {loginTC} from './authReducer';
 
